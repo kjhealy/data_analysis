@@ -36,14 +36,14 @@ docx:	clean $(DOCX)
 	R --no-echo -e "set.seed(100);knitr::knit('$<')"
 
 %.html: %.Rmd
-	R --no-echo -e "set.seed(100);rmarkdown::render('$<',  encoding = 'UTF-8')"
+	R --no-echo -e "set.seed(100);rmarkdown::render('$<',  output_format = distill::distill_article(), encoding = 'UTF-8')"
 
 %.tex:	%.md
 	$(PANDOC)/pandoc -r $(OPTIONS) -w latex -s  --pdf-engine=pdflatex --template=$(PREFIX)/templates/rmd-latex.template --filter $(PANDOC)/pandoc-crossref --citeproc --csl=$(PREFIX)/csl/ajps.csl --bibliography=$(BIB) -o $@ $<
 
 # PDFs are generated directly from Rmd with render(), and not indirectly vita knit() to md
 %.pdf:	%.Rmd
-	R --no-echo -e "set.seed(100);rmarkdown::render('$<')"
+	R --no-echo -e "set.seed(100);rmarkdown::render('$<', output_format = 'pdf_document')"
 
 %.docx:	%.md
 	$(PANDOC)/pandoc -r $(OPTIONS) -s --filter $(PANDOC)/pandoc-crossref --citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) --reference-doc=$(DOCXTEMPLATE) -o $@ $<
