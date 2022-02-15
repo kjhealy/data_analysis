@@ -21,7 +21,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-                      fig.path='figures',
+                      fig.path='figures/',
                       cache.path='cache/',
                       dev=c("ragg_png","cairo_pdf"),
                       fig.asp = 0.7,
