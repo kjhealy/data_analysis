@@ -31,6 +31,7 @@ pdf:	clean $(PDFS)
 html:	clean $(HTML)
 tex:	clean $(TEX)
 docx:	clean $(DOCX)
+md:	clean $(MD)
 
 %.md: %.Rmd
 	R --no-echo -e "set.seed(100);knitr::knit('$<')"

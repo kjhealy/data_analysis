@@ -7,6 +7,7 @@ author:
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 crossrefYaml: "config/pandoc-crossref-settings.yaml"
 output:
+  md_document: 
   html_document: distill::distill_article
   pdf_document: 
     md_extensions: +simple_tables+table_captions+yaml_metadata_block+smart
@@ -28,18 +29,18 @@ knitr::opts_chunk$set(
                       fig.retina = 2,
                       fig.show='hold',
                       fig.lp="fig:",
-                      cache=TRUE,
+                      cache=FALSE,
                       par=TRUE,
                       echo=FALSE,
                       warning = FALSE,
                       results="asis",
                       message=FALSE)
 
-knit_hooks$set(par = function(before, options, envir){
+knitr::knit_hooks$set(par = function(before, options, envir){
     if (before && options$fig.show != 'none') par(mar = c(4,4,.1,.1), cex.lab = .95, cex.axis = .9, mgp = c(2, .7, 0), tcl = -.3)
-}, crop=hook_pdfcrop)
+}, crop=knitr::hook_pdfcrop)
 
-opts_knit$set(kfigr.prefix=TRUE,
+knitr::opts_knit$set(kfigr.prefix=TRUE,
               kfigr.link=FALSE)
 
 ```
@@ -52,19 +53,32 @@ library(janitor)
 library(socviz)
 library(ggrepel)
 
+library(systemfonts)
+clear_registry()
+
+register_variant(
+  name = "Myriad Pro SemiCondensed",
+  family = "Myriad Pro",
+  width = "semicondensed",
+  weight = c("normal", "semibold"),
+)
+
 library(showtext)
+showtext_opts(dpi = 300)
 showtext_auto()
+
 library(myriad)
 import_myriad_semi()
 
+
 theme_set(theme_myriad_semi())
+
 ```
 
-## Introduction
+# Header
 
-```{r }
-gss_sm %>% 
-  ggplot(aes(x = religion)) + 
-  geom_bar() + 
-  facet_wrap(~ bigregion)
+```{r}
+
 ```
+
+
