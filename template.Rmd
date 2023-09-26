@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Template Document"
 author:
 - name: Kieran Healy
   affiliation: Duke University
@@ -7,17 +7,17 @@ author:
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 crossrefYaml: "config/pandoc-crossref-settings.yaml"
 output:
-  md_document: 
-  html_document: distill::distill_article
-  pdf_document: 
+  bookdown::pdf_book: 
+    toc: false
     md_extensions: +simple_tables+table_captions+yaml_metadata_block+smart
     template: /Users/kjhealy/.pandoc/templates/rmd-latex.template
     pandoc_args: [
       "--bibliography", "/Users/kjhealy/Documents/bibs/socbib-pandoc.bib",
-      "--filter", "pandoc-crossref",
       "--citeproc",
       "--csl", "/Users/kjhealy/.pandoc/csl/ajps.csl"
       ]      
+  html_document: 
+  md_document: 
 ---
 
 ```{r setup, include=FALSE}
@@ -25,10 +25,14 @@ knitr::opts_chunk$set(
                       fig.path='figures/',
                       cache.path='cache/',
                       dev=c("ragg_png","cairo_pdf"),
+                      fig.width = 6,
                       fig.asp = 0.7,
                       fig.retina = 2,
                       fig.show='hold',
                       fig.lp="fig:",
+                      fig.pos = "t",
+                      fig.align = "center",
+                      dpi = if (knitr::is_latex_output()) 72 else 300,
                       cache=FALSE,
                       par=TRUE,
                       echo=FALSE,
@@ -75,10 +79,58 @@ theme_set(theme_myriad_semi())
 
 ```
 
-# Header
+# Introduction
 
-```{r}
+This is a template for `Rmd` documents. 
 
+`r stringi::stri_rand_lipsum(1, start_lipsum = TRUE)`
+
+# Data
+
+`r stringi::stri_rand_lipsum(1, start_lipsum = TRUE)`
+
+Here is a code chunk.
+
+```{r rawmt, results='markup', echo=TRUE}
+tibble(mtcars)
 ```
+
+`r stringi::stri_rand_lipsum(3, start_lipsum = TRUE)` 
+
+Or as a table:
+
+```{r mtcars, echo=FALSE}
+knitr::kable(mtcars[1:5, 1:5], caption = "The mtcars data.", format = "pipe")
+```
+
+`r stringi::stri_rand_lipsum(1, start_lipsum = TRUE)`
+
+# Analysis
+
+We show a figure in Figure \@ref(fig:mpg-disp).
+
+Also see Equation \@ref(eq:mean).
+
+\begin{equation}
+\bar{X} = \frac{\sum_{i=1}^n X_i}{n} (\#eq:mean)
+\end{equation}
+
+And see Table \@ref(tab:mtcars).
+
+
+
+`r stringi::stri_rand_lipsum(1, start_lipsum = TRUE)`
+
+```{r mpg-disp, fig.cap="An mtcars plot."}
+mtcars |>
+  ggplot(mapping = aes(x = disp,
+                       y = mpg)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  labs(title = "Fuel efficency and engine displacement", 
+       xlab = "Displacement", 
+       ylab = "Miles per Gallon")
+```
+
 
 

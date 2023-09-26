@@ -40,14 +40,14 @@ md:	clean $(MD)
 	R --no-echo -e "set.seed(100);rmarkdown::render('$<',  output_format = distill::distill_article(), encoding = 'UTF-8')"
 
 %.tex:	%.md
-	$(PANDOC)/pandoc -r $(OPTIONS) -w latex -s  --pdf-engine=pdflatex --template=$(PREFIX)/templates/rmd-latex.template --filter $(PANDOC)/pandoc-crossref --citeproc --csl=$(PREFIX)/csl/ajps.csl --bibliography=$(BIB) -o $@ $<
+	$(PANDOC)/pandoc -r $(OPTIONS) -w latex -s  --pdf-engine=pdflatex --template=$(PREFIX)/templates/rmd-latex.template --citeproc --csl=$(PREFIX)/csl/ajps.csl --bibliography=$(BIB) --filter $(PANDOC)/pandoc-crossref  -o $@ $<
 
 # PDFs are generated directly from Rmd with render(), and not indirectly vita knit() to md
 %.pdf:	%.Rmd
-	R --no-echo -e "set.seed(100);rmarkdown::render('$<', output_format = 'pdf_document')"
+	R --no-echo -e "set.seed(100);rmarkdown::render('$<', output_format = 'bookdown::pdf_book')"
 
 %.docx:	%.md
-	$(PANDOC)/pandoc -r $(OPTIONS) -s --filter $(PANDOC)/pandoc-crossref --citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) --reference-doc=$(DOCXTEMPLATE) -o $@ $<
+	$(PANDOC)/pandoc -r $(OPTIONS) -s --citeproc --csl=$(PREFIX)/csl/$(CSL).csl --bibliography=$(BIB) --reference-doc=$(DOCXTEMPLATE) --filter $(PANDOC)/pandoc-crossref  -o $@ $<
 
 clean:
 	rm -f *.md *.html *.pdf *.tex *.bbl *.bcf *.blg *.aux *.log *.docx
